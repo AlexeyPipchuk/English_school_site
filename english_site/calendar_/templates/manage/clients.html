@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Личный кабинет</title>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'calendar_/login.css' %}">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="{% static 'calendar_/list.js' %}"></script>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Главная</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/teacher">Учителя</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Клиенты/группы<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/manage/classes/">Классы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/manage/courses/">Наши курсы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/manage/payment/">Раздел оплаты</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/calendar">Расписание</a>
+        </li>
+        <div style="position: absolute; right: 10px;">
+          <a type="button" class="btn btn-warning" href="/logout/">Выход</a>
+        </div>
+      </ul>
+    </div>
+  </nav>
+
+  <h2 style="margin: 40px 40px 20px 140px;">Группы: <h2>
+
+<div class="row">
+  <div class="col-lg-3 offset-lg-1">
+    <div style="background-color: #f8f9fa; min-height:400px; padding-left:10px;">
+      {% for i in groups %}
+      <div class="row">
+        <div class="col-lg-6" style="font-size: 16px; margin-bottom: 10px;">
+          <strong>{{ i.name }}</strong></br> курс: {{ i.course.name }} </br> обучающиеся: {{ i.number_of_clients }}
+        </div>
+        <div class="col-lg-6">
+              <a type="button" class="btn btn-warning" href="update_group/{{i.id}}" name="update_group">Edit</a>
+              <a type="button" class="btn btn-danger" href="delete_group/{{i.id}}" name="delete_group">Х</a>
+          </form>
+
+        </div>
+      </div>
+          {% for j in clients %}
+          {% if j.group.id == i.id %}
+                <div class="row" style="font-size: 14px; margin-bottom: 5px;">
+                  <div class="col-lg-6">
+                    <b>{{ j.last_name }}</b>
+                  </div>
+                  <div class="col-lg-6">
+                    <a style="max-height: 30px;" type="button" class="btn btn-warning" href="update_client/{{j.id}}" name="update_client">Edit</a>
+                    <a style="max-height: 30px;" type="button" class="btn btn-danger" href="delete_client/{{j.id}}" name="delete_client">Х</a>
+                  </div>
+                </div>
+          {% endif %}
+          {% endfor %}
+        </br>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div style="background-color: #f8f9fa; min-height:400px;padding-left:10px;">
+      <h3 style="padding: 20px;">Новая группа:</h3>
+      <form method="POST" action="create_group/">
+        {% csrf_token %}
+        {{ form }}
+        <p>
+            <h5>Введите номер группы</h5>
+            <input type="text" name="name" class="small" value="{{Group.name}}" />
+            <h5>Выберете курс</h5>
+            <select type="text" name="course" value="{{Client.course}}" style="font-size:22px; margin-bottom:15px;">
+              {% for i in courses %}
+                <option value="{{i.id}}">{{i.name}}</option>
+              {% endfor %}
+            </select>
+            <h5>Выберете преподавателя</h5>
+            <select type="text" name="teacher" value="{{Client.teacher}}" style="font-size:22px; margin-bottom:15px;">
+              {% for i in teachers %}
+                <option value="{{i.id}}">{{i.user.first_name}} {{i.user.last_name}}</option>
+              {% endfor %}
+            </select>
+        </p>
+        <input type="submit" class="small" value="Сохранить" >
+      </form>
+    </div>
+</div>
+
+
+<div class="col-lg-4">
+  <div style="background-color: #f8f9fa; min-height:400px;padding-left:10px;">
+    <h3 style="padding: 20px;">Новый клиент:</h3>
+    <form method="POST" action="create_client/">
+      {% csrf_token %}
+      {{ form }}
+      <p>
+          <h5>Введите имя</h5>
+          <input type="text" name="first_name" class="small" value="{{Client.first_name}}" />
+          <h5>Введите фамилию</h5>
+          <input type="text" name="last_name" class="small" value="{{Client.last_name}}" />
+          <h5>Введите начальный баланс клиента</h5>
+          <input type="text" name="balance" class="small" value="{{Client.balance}}" />
+          <h5>Выберете дату рождения</h5>
+          <input type="date" name="birth_date" class="small" value="{{Client.birth_date}}" />
+          <h5>Выберете группу</h5>
+          <select type="text" name="group" value="{{Client.group}}" style="font-size:22px; margin-bottom:15px;">
+            {% for i in groups %}
+              <option value="{{i.id}}">{{i.name}} {{i.course.name}}</option>
+            {% endfor %}
+          </select>
+      </p>
+      <input type="submit" class="small" value="Сохранить" >
+    </form>
+  </div>
+</div>
+
+
+
+</body>
+</html>

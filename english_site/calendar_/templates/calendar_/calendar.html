@@ -1,0 +1,131 @@
+{% load static %}
+<!--{% load bootstrap3 %}-->
+<!--{% bootstrap_css %}-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Календарь</title>
+    <script type="text/javascript" src="{% static 'calendar_/scripts/jquery-1.11.1.min.js' %}"></script>
+
+    <!--temp-->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="{% static 'calendar_/jqwidgets/jqx-all.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'calendar_/styles/calendar.css' %}">
+    <link rel="stylesheet" href="{% static 'calendar_/jqwidgets/styles/jqx.base.css' %}">
+    <script type="text/javascript" src="{% static 'calendar_/scripts/calendar.js' %}"></script>
+</head>
+<body>
+    {% csrf_token %}
+    <input type="hidden" id="role" value="{{role}}"/>
+    <input type="hidden" id="user_id" value="{{id}}"/>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Главная<span class="sr-only">Главная</span></a>
+                </li>
+                {% if role == 'student' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/calendar">Расписание</a>
+                </li>
+                {% endif %}
+                {% if role == 'manager' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/teacher/">Учителя</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/client/">Ученики</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage/classes/">Классы</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage/groups/">Группы</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage/courses/">Наши курсы</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/calendar">Расписание</a>
+                </li>
+                {% endif %}
+                {% if role == 'teacher' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/calendar">Расписание</a>
+                </li>
+                {% endif %}
+                {% if role != 'anon' %}
+                <div style="position: absolute; right: 10px;">
+                    <a type="button" class="btn btn-warning" href="/logout/">Выход</a>
+                </div>
+                {% endif %}
+                {% if role == 'anon' %}
+                <div style="position: absolute; right: 10px;">
+                    <a type="button" class="btn btn-info" href="login/">Авторизация</a>
+                </div>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div id="message"></div>
+    <div id="scheduler">
+    </div>
+    <div id="lesson_dialog">
+        <div>Занятие</div>
+        <div style="margin-left: 20px;">
+            <div class="row" style="width:100%; margin-top:10px">
+                <span class="col-md-3">Заголовок:</span>
+                <input id="title" class="col-md-8"/>
+            </div>
+            <div class="row" style="width:100%; margin-top:10px">
+                <span class="col-md-3">Дата:</span>
+                <div id="lesson_date" class="col-md-8"></div>
+            </div>
+            <div class="row" style="width:100%; margin-top:10px">
+                <span class="col-md-3">Начало:</span>
+                <input id="begin_time" class="col-md-8"/>
+            </div>
+            <div class="row" style="width:100%; margin-top:10px">
+                <span class="col-md-3">Конец:</span>
+                <input id="end_time" class="col-md-8"/>
+            </div>
+            <div id="period_box" class="row" style="width:100%; margin-top:10px">
+                <span class="col-md-3">Период:</span>
+                <input id="lesson_period" class="col-md-8"/>
+            </div>
+            <div class="row" style="width:100%; margin-top:10px;">
+                <span class="col-md-3">Мероприятие:</span>
+                <div id="check" class="col-md-7" style="padding: 0;"></div>
+            </div>
+            <div id="group_box" class="row" style="width:100%; margin-top:10px">
+                <span class="col-md-3">Группа:</span>
+                <div id="group_list" class="col-md-8" style="padding: 0;"></div>
+            </div>
+            <div class="row" style="width:100%; margin-top:10px">
+                <span class="col-md-3">Учителя:</span>
+                <div id="teacher_list" class="col-md-8" style="padding: 0;"></div>
+            </div>
+            <div class="row" style="width:100%; margin-top:10px">
+                <span class="col-md-3">Комната:</span>
+                <div id="room_list" class="col-md-8" style="padding: 0;"></div>
+            </div>
+            <div class="row" style="width:100%; margin-top:10px">
+                <span class="col-md-3">Описание:</span>
+                <div id="description" class="col-md-8"></div>
+            </div>
+            <div class="row" style="width:100%; margin-top: 10px;">
+                {% if role != 'student' %}
+                <div id="save_button" class="d-inline-block col-md-3 float-right" style="margin: 0px 10px 0px 10px;">Сохранить</div>
+                {% endif %}
+                <div id="close_button" class="d-inline-block col-md-3 float-right" style="margin-right:10px;">Назад</div>
+                {% if role != 'student' %}
+                <div id="delete_button" class="d-inline-block col-md-3 float-right" style="margin-right:10px;">Удалить</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Личный кабинет</title>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'calendar_/login.css' %}">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<div class="row"style="margin-top:100px; margin-left:100px;">
+  <div class="col-lg-4">
+      <h2 >{{client.first_name}} {{client.last_name}}</h2>
+      <h5>Текущий баланс: {{client.balance}}</h5>
+      <form action="save_balance/" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <label>Внести сумму:</label>
+        <input type="number" name="balance" value="client.balance"/></br>
+        <a href="/payment/" class="btn btn-warning">Назад</a>
+        <input type="submit" class="btn btn-info" value="Сохранить взнос">
+      </form>
+    </div>
+    <div class="col-lg-4" style="background-color: #f8f9fa; min-height:400px;">
+      <h2 style="margin:20px;">Журнал транзакций:</h2>
+      <div class="row">
+        <div class="col-lg-5 offset-lg-1">
+          <h4>Дата</h4>
+        </div>
+        <div class="col-lg-6">
+          <h4>Транзакция</h4>
+        </div>
+      </div>
+      {% for i in logs %}
+        <div class="row">
+          <div class="col-lg-6">
+            {{i.date}}
+          </div>
+          {% if i.difference > 0 %}
+          <div style="color:green;"class="col-lg-4 offset-lg-1">
+            +{{i.difference}}
+          </div>
+          {% else %}
+          <div style="color:red;"class="col-lg-4 offset-lg-1">
+             {{i.difference}}
+          </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+</div>
+
+
+</body>
+</html>

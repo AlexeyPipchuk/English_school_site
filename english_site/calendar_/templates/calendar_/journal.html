@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Школа английского</title>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'calendar_/login.css' %}">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script>
+</head>
+<body>
+
+
+  <h1 style="margin-left: 50px; margin-top:50px;">Занятие группы {{group.name}} от {{lesson.begin}}</h1>
+  <div style="margin-left:70px;">
+    <h3>Аудитория: {{lesson.room.name}}</h3>
+    <!-- <h3>Тема занятия: {{lesson.description}}</h3> -->
+  </div>
+
+  <div style="min-height:400px; background-color:#f8f9fa">
+    <h3 style="margin-left:45px;">  <strong>Отметить посещаемость:</strong></h3>
+    <div class="container">
+      <form action="save_journal/" method="post">
+        <div class="row">
+          {% csrf_token %}
+          {{ form }}
+          <div class="col-lg-6" >
+            {% for i in checked %}
+              <div class="row" style="margin: 10px 0px 10px 70px;">
+                <div class="col-lg-8">
+                  <h4>{{i.first_name}} {{i.last_name}}</h4>
+                </div>
+                <div class="col-lg-1">
+                      <input type="checkbox" name="checks" value="{{i.id}}" checked>
+                </div>
+              </div>
+            {% endfor %}
+            {% for i in unchecked %}
+              <div class="row" style="margin: 10px 0px 10px 70px;">
+                <div class="col-lg-8">
+                  <h4>{{i.first_name}} {{i.last_name}}</h4>
+                </div>
+                <div class="col-lg-1">
+                      <input type="checkbox" name="checks" value="{{i.id}}">
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="col-lg-4 offset-lg-2">
+            <input type="submit" class="btn btn-info" name="true" value="Сохранить и вернуться">
+            <a href="/calendar/" type="button" class="btn btn-warning" name="back">Вернуться</a>
+          </div>
+        </div>
+      </form>
+    </div>
+    </div>
+</body>
+</html>

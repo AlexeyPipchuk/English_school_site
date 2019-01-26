@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Личный кабинет</title>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'calendar_/login.css' %}">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Главная</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/teacher">Учителя</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Клиенты/группы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/manage/classes/">Классы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/manage/groups/">Группы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/manage/courses/">Наши курсы</a>
+        </li>
+        <li class="nav-item  active">
+          <a class="nav-link" href="/manage/payment/">Раздел оплаты<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/calendar">Расписание</a>
+        </li>
+        <div style="position: absolute; right: 10px;">
+          <a type="button" class="btn btn-warning" href="/logout/">Выход</a>
+        </div>
+      </ul>
+    </div>
+  </nav>
+
+<div class="row" style="margin-top:20px;">
+  <div style="background-color: #f8f9fa; min-height:400px;" class="col-lg-4 offset-lg-4">
+    <h3 style="margin: 20px;">Раздел оплаты</h3>
+      {% for i in groups %}
+      <div class="row" style="margin-top:20px; margin-left: 20px;">
+        <h3>{{i.name}}</h3>
+      </div>
+         {% for j in clients %}
+         <div class="row">
+             {% if j.group.id == i.id %}
+                 <div class="col-lg-5" style="margin-left: 40px;">
+                    <a href="balance/{{j.id}}" name="balance" style="color: black;">{{j.first_name}} {{j.last_name}}</a>
+                 </div>
+                 <div class="col-lg-4 offset-lg-2" style="margin-left: 40px;">
+                    <b>{{j.balance}} RUB</b>
+                 </div>
+             {% endif %}
+         </div>
+         {% endfor %}
+      {% endfor %}
+  </div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Личный кабинет</title>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'calendar_/login.css' %}">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" src="{% static 'calendar_/scripts/jquery-1.11.1.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'calendar_/jqwidgets/jqx-all.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'calendar_/jqwidgets/styles/jqx.base.css' %}">
+  <script type="text/javascript" src="{% static 'calendar_/scripts/class.js' %}"></script>
+</head>
+<body style="overflow-x:hidden;">
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Главная</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/teacher/">Учителя</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/client/">Ученики</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="/manage/classes/">Классы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/manage/groups/">Группы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/manage/courses/">Наши курсы</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/calendar">Расписание</a>
+        </li>
+        <div style="position: absolute; right: 10px;">
+          <a type="button" class="btn btn-warning" href="/logout/">Выход</a>
+        </div>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="row">
+    <div class="col-md-5" style="margin-left:50px;">
+      <h2>Аудитории:</h2>
+      <div id="class_grid"></div>
+    </div>
+    <div>
+      <form method="POST" action="create/" style="margin: 50px 0px 0px 50px;">
+        {% csrf_token %}
+        <h3 style="">Новая аудитория:</h3>
+        <div class="row">
+          <div class="col-md-12">
+            <label>Номер аудитории:</label>
+            <input type="text" class="form-control" name="name" value="" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <label>Количество мест:</label>
+            <input type="number" class="form-control" name="number_of_seats" value="0" />
+          </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <div class="col-md-12">
+            <input type="submit" class="btn btn-primary" value="Сохранить" >
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

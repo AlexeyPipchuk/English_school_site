@@ -1,0 +1,68 @@
+{% load myfilters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Школа английского</title>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'calendar_/login.css' %}">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js" integrity="sha384-zDnhMsjVZfS3hiP7oCBRmfjkQC4fzxVxFhBx8Hkz2aZX8gEvA/jsP3eXRCvzTofP" crossorigin="anonymous"></script>
+  <style>*{padding: 0; margin: 0;}</style>
+</head>
+<body>
+<div class="container">
+  <div class="row align-items-center" style="margin-top: 100px; margin-bottom: 20px;">
+      <div class="col-lg-4 offset-lg-4"><h3>Авторизация</h3></div>
+ </div>
+</div>
+<form method="POST" class="form-horizontal">
+    {% csrf_token %}
+    <div class="col-md-4" style="margin: 0 auto;">
+        <div class="fieldWrapper form-group">
+            <label for="{{ form.username.id_for_label }}" class="control-label col-md-1">Логин:</label>
+            <div class="col-md-9">
+                {{ form.username|add_class:'form-control' }}
+            </div>
+        </div>
+        <div class="fieldWrapper form-group">
+            <label for="{{ form.password.id_for_label }}" class="control-label col-md-1">Пароль:</label>
+            <div class="col-md-9">
+                {{ form.password|add_class:'form-control'}}
+                {% if form.manager %}
+                <span style="color:red;">Неправильный логин или пароль</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2" style="margin: 0 auto;">
+          <input type="submit" value="Войти" class="btn btn-primary" style="margin">
+    </div>
+</form>
+
+<form method="post" class="from" style="margin-top:50px;">
+  {% csrf_token %}
+  <div class="col-md-4" style="margin: 0 auto;">
+      <h1 class="col-md-10">Я Студент!</h1>
+      <div class="form-group">
+          <div class="col-md-1">
+              <label for="name_input" class="control-label">Фамилия:</label>
+          </div>
+          <div class="col-md-9">
+              <input id="name_input" class="form-control" type="text" size="40" name="last_name"/>
+              {% if form.student %}
+                 <span style="color:red;">Не существует такого студента</span>
+              {% endif %}
+          </div>
+      </div>
+  </div>
+  <div class="col-md-2" style="margin: 0 auto;">
+      <input type="submit" class="btn btn-primary" name="action" value="Войти"/>
+  </div>
+</form>
+
+</body>
+</html>
